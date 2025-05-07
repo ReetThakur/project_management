@@ -6,9 +6,12 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Resources\ProjectResource;
+use App\Traits\NotificationTrait;
 
 class ProjectController extends Controller
 {
+    use NotificationTrait;
+
     /**
      * Display a listing of the resource.
      */
@@ -71,17 +74,24 @@ class ProjectController extends Controller
             'status' => 'required|in:active,completed',
         ]);
 
-        $project = Project::create([
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'start_date' => $validated['start_date'],
-            'due_date' => $validated['due_date'],
-            'status' => $validated['status'],
-            'created_by' => $request->user()->id,
-        ]);
+        try {
+            $project = Project::create([
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'start_date' => $validated['start_date'],
+                'due_date' => $validated['due_date'],
+                'status' => $validated['status'],
+                'created_by' => $request->user()->id,
+            ]);
 
-        return redirect()->route('projects.show', $project)
-            ->with('success', 'Project created successfully.');
+            return $this->successMessage(
+                'Project created successfully!',
+                'projects.show',
+                ['project' => $project->id]
+            );
+        } catch (\Exception $e) {
+            return $this->errorMessage('Failed to create project. Please try again.');
+        }
     }
 
     /**
@@ -131,8 +141,11 @@ class ProjectController extends Controller
 
         $project->update($validated);
 
-        return redirect()->route('projects.show', $project)
-            ->with('success', 'Project updated successfully.');
+        return $this->successMessage(
+            'Project updated successfully.',
+            'projects.show',
+            ['project' => $project->id]
+        );
     }
 
     /**
@@ -146,7 +159,6 @@ class ProjectController extends Controller
         
         $project->delete();
 
-        return redirect()->route('projects.index')
-            ->with('success', 'Project deleted successfully.');
+        return $this->successMessage('Project deleted successfully.');
     }
 }

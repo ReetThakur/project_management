@@ -10,16 +10,12 @@
                         Edit Task
                     </a>
                 @endcan
-                @can('delete', $task)
-                    <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                            onclick="return confirm('Are you sure you want to delete this task?')">
-                            Delete Task
-                        </button>
-                    </form>
-                @endcan
+                <x-delete-confirmation 
+                    :route="route('tasks.destroy', $task)"
+                    title="Delete Task"
+                    text="Are you sure you want to delete this task? This action cannot be undone.">
+                    Delete Task
+                </x-delete-confirmation>
             </div>
         </div>
     </x-slot>

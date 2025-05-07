@@ -7,9 +7,12 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Http\Resources\CommentResource;
 use App\Models\Notification;
+use App\Traits\NotificationTrait;
 
 class CommentController extends Controller
 {
+    use NotificationTrait;
+
     /**
      * Display a listing of the resource.
      */
@@ -66,7 +69,11 @@ class CommentController extends Controller
             return new CommentResource($comment);
         }
 
-        return back()->with('success', 'Comment added successfully.');
+        return $this->successMessage(
+            'Comment added successfully!',
+            'tasks.show',
+            ['task' => $comment->task_id]
+        );
     }
 
     /**
@@ -88,9 +95,19 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Comment $comment)
     {
-        //
+        $validated = $request->validate([
+            'content' => 'required|string',
+        ]);
+
+        $comment->update($validated);
+
+        return $this->successMessage(
+            'Comment updated successfully!',
+            'tasks.show',
+            ['task' => $comment->task_id]
+        );
     }
 
     /**
@@ -104,6 +121,10 @@ class CommentController extends Controller
 
         $comment->delete();
 
-        return back()->with('success', 'Comment deleted successfully.');
+        return $this->successMessage(
+            'Comment deleted successfully!',
+            'tasks.show',
+            ['task' => $taskId]
+        );
     }
 }

@@ -9,9 +9,12 @@ use Illuminate\Http\Request;
 use App\Http\Resources\TaskResource;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Notification;
+use App\Traits\NotificationTrait;
 
 class TaskController extends Controller
 {
+    use NotificationTrait;
+
     /**
      * Display a listing of the resource.
      */
@@ -96,8 +99,11 @@ class TaskController extends Controller
             ]);
         }
 
-        return redirect()->route('tasks.show', $task)
-            ->with('success', 'Task created successfully.');
+        return $this->successMessage(
+            'Task created successfully!',
+            'tasks.show',
+            ['task' => $task->id]
+        );
     }
 
     /**
@@ -213,8 +219,11 @@ class TaskController extends Controller
             }
         }
 
-        return redirect()->route('tasks.show', $task)
-            ->with('success', 'Task updated successfully.');
+        return $this->successMessage(
+            'Task updated successfully!',
+            'tasks.show',
+            ['task' => $task->id]
+        );
     }
 
     /**
@@ -228,7 +237,9 @@ class TaskController extends Controller
         
         $task->delete();
 
-        return redirect()->route('tasks.index')
-            ->with('success', 'Task deleted successfully.');
+        return $this->successMessage(
+            'Task deleted successfully!',
+            'tasks.index'
+        );
     }
 }

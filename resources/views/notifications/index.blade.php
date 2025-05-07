@@ -35,13 +35,12 @@
                                                 </button>
                                             </form>
                                         @endif
-                                        <form action="{{ route('notifications.destroy', $notification) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                                                Delete
-                                            </button>
-                                        </form>
+                                        <x-delete-confirmation 
+                                            :route="route('notifications.destroy', $notification)"
+                                            title="Delete Notification"
+                                            text="Are you sure you want to delete this notification?">
+                                            Delete
+                                        </x-delete-confirmation>
                                     </div>
                                 </div>
                             @endforeach

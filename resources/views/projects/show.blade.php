@@ -11,14 +11,12 @@
                     </a>
                 @endcan
                 @can('delete', $project)
-                    <form action="{{ route('projects.destroy', $project) }}" method="POST" class="inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                            onclick="return confirm('Are you sure you want to delete this project?')">
-                            Delete Project
-                        </button>
-                    </form>
+                    <x-delete-confirmation 
+                        :route="route('projects.destroy', $project)"
+                        title="Delete Project"
+                        text="Are you sure you want to delete this project? This action cannot be undone.">
+                        Delete Project
+                    </x-delete-confirmation>
                 @endcan
             </div>
         </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,6 +13,20 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- SweetAlert2 -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+
+        <!-- Add this script for dark mode -->
+        <script>
+            // Check for dark mode preference
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        </script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -33,6 +47,47 @@
             </main>
         </div>
 
-        @include('components.dark-mode-toggle')
+        <!-- Add this script for toast notifications -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize SweetAlert2
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+
+                // Check for session messages
+                @if(session('success'))
+                    Toast.fire({
+                        icon: 'success',
+                        title: "{{ session('success') }}"
+                    });
+                @endif
+
+                @if(session('error'))
+                    Toast.fire({
+                        icon: 'error',
+                        title: "{{ session('error') }}"
+                    });
+                @endif
+
+                @if(session('warning'))
+                    Toast.fire({
+                        icon: 'warning',
+                        title: "{{ session('warning') }}"
+                    });
+                @endif
+
+                @if(session('info'))
+                    Toast.fire({
+                        icon: 'info',
+                        title: "{{ session('info') }}"
+                    });
+                @endif
+            });
+        </script>
     </body>
 </html>
