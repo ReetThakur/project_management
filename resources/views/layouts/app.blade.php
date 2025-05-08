@@ -18,9 +18,8 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 
-        <!-- Add this script for dark mode -->
         <script>
-            // Check for dark mode preference
+            // Check for dark mode preference on page load
             if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
             } else {
@@ -47,10 +46,9 @@
             </main>
         </div>
 
-        <!-- Add this script for toast notifications -->
+        <!-- Toast Notifications Script -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Initialize SweetAlert2
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
@@ -59,7 +57,6 @@
                     timerProgressBar: true
                 });
 
-                // Check for session messages
                 @if(session('success'))
                     Toast.fire({
                         icon: 'success',
@@ -87,6 +84,49 @@
                         title: "{{ session('info') }}"
                     });
                 @endif
+            });
+        </script>
+
+        <!-- Dark Mode Toggle Script -->
+        <script>
+            // Wait for the DOM to be fully loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                // Get the toggle button
+                const toggleButton = document.getElementById('theme-toggle');
+                
+                // Get the icons
+                const darkIcon = document.getElementById('theme-toggle-dark-icon');
+                const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+                // Function to update icons
+                function updateIcons() {
+                    if (document.documentElement.classList.contains('dark')) {
+                        darkIcon.classList.add('hidden');
+                        lightIcon.classList.remove('hidden');
+                    } else {
+                        darkIcon.classList.remove('hidden');
+                        lightIcon.classList.add('hidden');
+                    }
+                }
+
+                // Set initial icon state
+                updateIcons();
+
+                // Add click event listener
+                toggleButton.addEventListener('click', function() {
+                    // Toggle dark mode
+                    document.documentElement.classList.toggle('dark');
+                    
+                    // Update localStorage
+                    if (document.documentElement.classList.contains('dark')) {
+                        localStorage.setItem('color-theme', 'dark');
+                    } else {
+                        localStorage.setItem('color-theme', 'light');
+                    }
+
+                    // Update icons
+                    updateIcons();
+                });
             });
         </script>
     </body>
