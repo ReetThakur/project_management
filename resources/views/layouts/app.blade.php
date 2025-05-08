@@ -28,22 +28,21 @@
         </script>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
+        <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+            @include('layouts.sidebar')
+            <div class="flex-1 flex flex-col min-h-screen">
+                @include('layouts.topbar')
+                <main class="flex-1 py-8 px-4 sm:px-8 bg-gray-50 dark:bg-gray-900">
+                    <div class="max-w-7xl mx-auto">
+                        @if (isset($header))
+                            <div class="mb-8">
+                                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $header }}</h1>
+                            </div>
+                        @endif
+                        {{ $slot }}
                     </div>
-                </header>
-            @endif
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+                </main>
+            </div>
         </div>
 
         <!-- Toast Notifications Script -->
@@ -89,16 +88,11 @@
 
         <!-- Dark Mode Toggle Script -->
         <script>
-            // Wait for the DOM to be fully loaded
             document.addEventListener('DOMContentLoaded', function() {
-                // Get the toggle button
                 const toggleButton = document.getElementById('theme-toggle');
-                
-                // Get the icons
                 const darkIcon = document.getElementById('theme-toggle-dark-icon');
                 const lightIcon = document.getElementById('theme-toggle-light-icon');
 
-                // Function to update icons
                 function updateIcons() {
                     if (document.documentElement.classList.contains('dark')) {
                         darkIcon.classList.add('hidden');
@@ -109,22 +103,11 @@
                     }
                 }
 
-                // Set initial icon state
                 updateIcons();
 
-                // Add click event listener
                 toggleButton.addEventListener('click', function() {
-                    // Toggle dark mode
                     document.documentElement.classList.toggle('dark');
-                    
-                    // Update localStorage
-                    if (document.documentElement.classList.contains('dark')) {
-                        localStorage.setItem('color-theme', 'dark');
-                    } else {
-                        localStorage.setItem('color-theme', 'light');
-                    }
-
-                    // Update icons
+                    localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
                     updateIcons();
                 });
             });
