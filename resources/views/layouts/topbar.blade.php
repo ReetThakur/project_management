@@ -4,6 +4,8 @@
         <div></div>
         <!-- Right: Actions -->
         <div class="flex items-center gap-4">
+            <!-- Notification Center -->
+            <notification-center></notification-center>
             <!-- Dark Mode Toggle -->
             <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none rounded-lg text-sm p-2.5 transition">
                 <svg id="theme-toggle-dark-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

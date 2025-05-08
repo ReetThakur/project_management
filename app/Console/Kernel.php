@@ -30,6 +30,8 @@ class Kernel extends ConsoleKernel
                 ]);
             }
         })->dailyAt('08:00');
+
+        $schedule->command('tasks:check-due-dates')->daily();
     }
 
     protected function commands(): void
